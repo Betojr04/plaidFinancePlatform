@@ -41,9 +41,23 @@ function renderCreateAccount(container) {
   container.innerHTML = `
         <h1>Create Account</h1>
         <form id="create-account-form">
+            <label for="email">Email:</label>
             <input type="text" id="email" placeholder="email" required>
-            <input type="text" id="username" placeholder="username" required>
-            <input type="password" id="password" placeholder="password" required>
+            <span id="emailError" class="error" ></span>
+
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="username" required minLength="5" maxLength="20"> 
+            <span id="usernameError" class="error" ></span>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" placeholder="password" required minLength="8">
+            <span id="passwordError" class="error"></span>
+
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+            <span id="confirmPasswordError" class="error"></span>
+
+
             <button type="submit">Create Account</button>
         </form>
     `;
