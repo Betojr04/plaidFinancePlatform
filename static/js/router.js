@@ -2,7 +2,8 @@ export const initializeRouter = () => {
   function renderRoute() {
     const appDiv = document.getElementById("app");
 
-    const route = window.location.hash.slice(1) || "login";
+    const route =
+      window.location.pathname.slice(1).replace(/\/$/, "") || "login";
 
     appDiv.innerHTML = "";
 
@@ -17,7 +18,10 @@ export const initializeRouter = () => {
     }
   }
 
-  window.addEventListener("hashchange", renderRoute);
+  // Make renderRoute accessible globally:
+  window.renderRoute = renderRoute;
+
+  window.addEventListener("popstate", renderRoute);
 
   renderRoute();
 };
@@ -27,14 +31,47 @@ of appDiv via the DOM. getting element by Id
 */
 function renderLogin(container) {
   container.innerHTML = `
-    <h1>Login</h1>
-    <form id="login-form">
-        <input type="text" id="username"  placeholder="username" required>
-        <input type="password" id="password" placeholder="password" required>
-        <button type="submit">Login</button>
-        <button type="submit">Create Account</button>
-    </form>
+  <div class="login-wrapper">
+  <h1>Login</h1>
+  <form id="login-form">
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input type="text" id="username" placeholder="username" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" id="password" placeholder="password" required>
+    </div>
+    <div class="btn-grp">
+      <button type="submit">Login</button>
+      <button type="button" id="createaccount">Create Account</button>
+    </div>
+  </form>
+</div>
+
     `;
+
+  // this takes the login info typed in and logs the user in
+  const loginForm = document.getElementById("login-form");
+  if (loginForm) {
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      import("./auth.js").then((authModule) => {
+        authModule.login(
+          document.getElementById("username").value,
+          document.getElementById("password").value
+        );
+      });
+    });
+  }
+
+  const goToCreate = document.getElementById("createaccount");
+  if (goToCreate) {
+    goToCreate.addEventListener("click", () => {
+      history.pushState({}, "", "/createaccount");
+      window.renderRoute();
+    });
+  }
 }
 
 function renderCreateAccount(container) {
@@ -59,37 +96,32 @@ function renderCreateAccount(container) {
 
 
             <button type="submit">Create Account</button>
+            <button type="submit" id="backToLogin" >Back To Login</button>
         </form>
     `;
-}
 
-// this is handling when the create account button is clicked
-const createAccountForm = document.getElementById("create-account-form");
-if (createAccountForm) {
-  createAccountForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    import("./auth.js").then((authModule) => {
-      authModule.createAccount(
-        document.getElementById("email").value,
-        document.getElementById("username").value,
-        document.getElementById("password").value
-      );
+  // this is handling when the create account button is clicked
+  const createAccountForm = document.getElementById("create-account-form");
+  if (createAccountForm) {
+    createAccountForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      import("./auth.js").then((authModule) => {
+        authModule.createAccount(
+          document.getElementById("email").value,
+          document.getElementById("username").value,
+          document.getElementById("password").value
+        );
+      });
     });
-  });
-}
-
-// this takes the login info typed in and logs the user in
-const loginForm = document.getElementById("login-form");
-if (loginForm) {
-  loginForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    import("./auth.js").then((authModule) => {
-      authModule.login(
-        document.getElementById("username").value,
-        document.getElementById("password").value
-      );
+  }
+  // Attach navigation listener to go back to login
+  const backToLogin = document.getElementById("backToLogin");
+  if (backToLogin) {
+    backToLogin.addEventListener("click", () => {
+      history.pushState({}, "", "/login");
+      window.renderRoute();
     });
-  });
+  }
 }
 
 function renderDashboard(container) {

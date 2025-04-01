@@ -7,7 +7,7 @@ export const login = (username, password) => {
 export const logout = () => {
   localStorage.removeItem("authToken");
 
-  window.location.hash = "login";
+  window.location.pathname = "login";
 };
 
 export const isAuthenticated = () => {
