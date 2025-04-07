@@ -2,6 +2,7 @@ from flask import Flask
 from .config import Config
 from .plaid_clients import init_plaid_client
 from .routes import main_bp
+from .auth import auth_bp
 from .plaid_routes import plaid_bp
 
 
@@ -13,5 +14,6 @@ def create_app():
 
     app.register_blueprint(main_bp)
     app.register_blueprint(plaid_bp)
+    app.register_blueprint(auth_bp)
 
     return app

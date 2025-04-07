@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, Flask, send_from_directory, current_app
 import os
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 main_bp = Blueprint("main", __name__)

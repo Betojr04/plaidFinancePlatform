@@ -1,41 +1,45 @@
-.login-wrapper {
+/* Shared container styling for forms */
+.login-wrapper,
+.create-account-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 50vh;
-
     border: solid red 1px;
+    padding: 20px;
 }
 
-#login-form {
+/* Form styling */
+#login-form,
+#create-account-form {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
+    align-items: stretch;
+    width: 100%;
+    max-width: 400px;
 }
 
+/* Flexbox for each label/input group */
 .form-group {
     display: flex;
     align-items: center;
+    gap: 0.5rem;
     margin-bottom: 1rem;
 }
 
 .form-group label {
     width: 100px;
-    /* Optionally, set a fixed width for consistency */
+    text-align: right;
 }
 
+.form-group input {
+    flex: 1;
+    padding: 0.5rem;
+}
 
+/* Button group styling */
 .btn-grp {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin: 5px;
-    /* border: solid blue 1px; */
-    padding: .5rem;
     gap: 1rem;
-
+    justify-content: center;
 }
